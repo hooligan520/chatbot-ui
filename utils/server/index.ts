@@ -29,7 +29,7 @@ export const OpenAIStream = async (
 ) => {
   if (!checkAccessCode(key)) {
     console.error(`invalid access code`);
-    throw new OpenAIError('invalid access code', 'error', '', 500);
+    throw new OpenAIError('invalid access code', 'error', '', '500');
   }
 
   const res = await fetch(`${OPENAI_API_HOST}/v1/chat/completions`, {
