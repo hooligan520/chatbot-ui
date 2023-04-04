@@ -1,5 +1,5 @@
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
-import { OPENAI_API_HOST } from '@/utils/app/const';
+import { OPENAI_API_HOST, checkAccessCode } from '@/utils/app/const';
 
 export const config = {
   runtime: 'edge',
@@ -11,10 +11,17 @@ const handler = async (req: Request): Promise<Response> => {
       key: string;
     };
 
+    if (!checkAccessCode(key)) {
+      console.error(
+        `invalid access code`,
+      );
+      throw new Error('invalid access code');
+    }
+
     const response = await fetch(`${OPENAI_API_HOST}/v1/models`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         ...(process.env.OPENAI_ORGANIZATION && {
           'OpenAI-Organization': process.env.OPENAI_ORGANIZATION,
         })

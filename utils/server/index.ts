@@ -5,7 +5,7 @@ import {
   ParsedEvent,
   ReconnectInterval,
 } from 'eventsource-parser';
-import { OPENAI_API_HOST } from '../app/const';
+import { OPENAI_API_HOST, checkAccessCode } from '../app/const';
 
 export class OpenAIError extends Error {
   type: string;
@@ -27,10 +27,15 @@ export const OpenAIStream = async (
   key: string,
   messages: Message[],
 ) => {
+  if (!checkAccessCode(key)) {
+    console.error(`invalid access code`);
+    throw new Error('invalid access code');
+  }
+
   const res = await fetch(`${OPENAI_API_HOST}/v1/chat/completions`, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`,
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       ...(process.env.OPENAI_ORGANIZATION && {
         'OpenAI-Organization': process.env.OPENAI_ORGANIZATION,
       }),
