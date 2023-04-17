@@ -2,13 +2,13 @@ import { Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 
 import { AZURE_DEPLOYMENT_ID, OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from '../app/const';
+import { checkAccessCode } from '../app/const';
 
 import {
   ParsedEvent,
   ReconnectInterval,
   createParser,
 } from 'eventsource-parser';
-import { OPENAI_API_HOST, checkAccessCode } from '../app/const';
 
 export class OpenAIError extends Error {
   type: string;
